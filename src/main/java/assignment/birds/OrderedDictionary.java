@@ -58,14 +58,27 @@ public class OrderedDictionary implements OrderedDictionaryADT {
     @Override
     public void insert(BirdRecord r) throws DictionaryException {
         // Write this method
-        DataKey key = new DataKey();
-        key = r.getDataKey();
-        if (find(key) == null) {
-            r = new Node().getData();
+        Node current = root;
+        int comparison;
+        if (root.isEmpty()) {
+            root = new Node(r);
         }
-        //use node.setLeftChild()
-        else
-            throw new DictionaryException("Already Exists in the Dictionary");
+
+        while (true) {
+            comparison = current.getData(r);
+            // need to figure out how to create a current to traverse and a record(r)
+            if (r.getDataKey() < 1) { // goes to left side if x < current
+                // look at others to see how to insert
+                current.;
+            }
+            if (comparison == 1) { // goes to right side if x > current
+                if (current.getLeftChild() == null) {
+                    // Key not found
+                    throw new DictionaryException("There is no record matches the given key");
+                }
+                current = current.getLeftChild();
+            }
+        }
     }
 
     /**
