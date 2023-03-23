@@ -157,28 +157,46 @@ public class BirdsController implements Initializable {
         // Write this method
         //Ues dictionary method smallest();
         //bird.get
-        showBird();
+        try {
+            bird = database.smallest();
+            showBird();
+        }
+        catch ( DictionaryException abc) {
+            displayAlert(abc.getMessage());
+        }
     }
 
     public void last() {
         // Write this method
         // largest()
-        BirdRecord obj;
-        obj = obj.largest();
-        showBird();
+        //BirdRecord obj;
+        try {
+            bird = database.largest();
+            showBird();
+        } catch ( DictionaryException abc) {
+            displayAlert(abc.getMessage());
+        }
     }
 
     public void next() {
         // Write this method;
         // uses successor() method
-
-        showBird();
+        try {
+            bird = database.successor();
+            showBird();
+        } catch ( DictionaryException abc) {
+            displayAlert(abc.getMessage());
+        }
     }
 
     public void previous() {
         // Write this method
-        //predeessor methoid
-        showBird();
+        try {
+            bird = database.predecessor();
+            showBird();
+        } catch ( DictionaryException abc) {
+            displayAlert(abc.getMessage());
+        }
     }
 
     public void play() {
