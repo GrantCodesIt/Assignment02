@@ -156,25 +156,29 @@ public class BirdsController implements Initializable {
     public void first() {
         // Write this method
         //Ues dictionary method smallest();
-        get.smallest();
+        //bird.get
         showBird();
     }
 
     public void last() {
         // Write this method
         // largest()
-        get.Largest();
+        BirdRecord obj;
+        obj = obj.largest();
         showBird();
     }
 
     public void next() {
         // Write this method;
         // uses successor() method
+
+        showBird();
     }
 
     public void previous() {
         // Write this method
         //predeessor methoid
+        showBird();
     }
 
     public void play() {

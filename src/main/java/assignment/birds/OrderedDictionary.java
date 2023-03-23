@@ -77,9 +77,18 @@ public class OrderedDictionary implements OrderedDictionaryADT {
      */
     @Override
     public void remove(DataKey k) throws DictionaryException {
-        int keyIndex = find(k);
         // set predecssor.next == null
-        predecessor(k).next == null;
+        // Grab predecessor to k
+        // If has one, check if it has a left child, which it removes. And if not we remove right child
+        Node node = root;
+        node.equals(predecessor(k));
+        if( node.hasLeftChild() == true) {
+            node.setLeftChild(null);
+        }
+        else if (node.hasRightChild() == true) {
+            node.setRightChild(null);
+        }
+
     }
 
     /**
