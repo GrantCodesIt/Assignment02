@@ -156,11 +156,15 @@ public class BirdsController implements Initializable {
     public void first() {
         // Write this method
         //Ues dictionary method smallest();
+        get.smallest();
+        showBird();
     }
 
     public void last() {
         // Write this method
         // largest()
+        get.Largest();
+        showBird();
     }
 
     public void next() {
