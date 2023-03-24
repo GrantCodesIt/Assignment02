@@ -36,7 +36,7 @@ public class DataKey {
                     return -1;
                 }
             }
-            else if(this.getBirdSize() < k.getBirdSize()){
+            else if(  this.getBirdSize() < k.getBirdSize()){
                     return -1;
             }
             return 1;

@@ -182,7 +182,8 @@ public class BirdsController implements Initializable {
         // Write this method;
         // uses successor() method
         try {
-            bird = database.successor();
+
+            bird = database.successor(bird.getDataKey());
             showBird();
         } catch ( DictionaryException abc) {
             displayAlert(abc.getMessage());
@@ -192,7 +193,7 @@ public class BirdsController implements Initializable {
     public void previous() {
         // Write this method
         try {
-            bird = database.predecessor();
+            bird = database.predecessor(bird.getDataKey());
             showBird();
         } catch ( DictionaryException abc) {
             displayAlert(abc.getMessage());
