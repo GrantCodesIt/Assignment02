@@ -64,30 +64,29 @@ public class OrderedDictionary implements OrderedDictionaryADT {
         if (root.isEmpty()) {
             root = new Node(r);
         }
-        while (true) {
-            DataKey k = current.getData().getDataKey();
-            // Need to figure out why k is becoming NULL causing an error in the compareTo function
-            comparison = k.compareTo(r.getDataKey());
-            if (comparison == 0) {
-                throw new DictionaryException("Already Exists");
-            }
-            if (comparison == 1) { // goes to left side if x < current
-                // look at others to see how to insert
-                if (current.hasLeftChild()) {
-                    current = current.getLeftChild();
+        else {
+            while (true) {
+                //DataKey k = current.getData().getDataKey();
+                // Need to figure out why k is becoming NULL causing an error in the compareTo function
+                comparison = current.getData().getDataKey().compareTo(r.getDataKey());
+                if (comparison == 0) {
+                    throw new DictionaryException("Already Exists");
                 }
-                else {
-                    current.setLeftChild(new Node(r));
-                    break;
-                }
-            }
-            if (comparison == -1) { // goes to right side if x > current
-                if (current.hasRightChild()) {
-                    current = current.getRightChild();
-                }
-                else {
-                    current.setRightChild(new Node(r));
-                    break;
+                if (comparison == 1) { // goes to left side if x < current
+                    // look at others to see how to insert
+                    if (current.hasLeftChild()) {
+                        current = current.getLeftChild();
+                    } else {
+                        current.setLeftChild(new Node(r));
+                        break;
+                    }
+                } else if (comparison == -1) { // goes to right side if x > current
+                    if (current.hasRightChild()) {
+                        current = current.getRightChild();
+                    } else {
+                        current.setRightChild(new Node(r));
+                        break;
+                    }
                 }
             }
         }
