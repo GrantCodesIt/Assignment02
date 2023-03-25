@@ -104,7 +104,7 @@ public class OrderedDictionary implements OrderedDictionaryADT {
         Node current = root;
         int comparison;
         if (root.isEmpty()) {
-            throw new DictionaryException("There is no record matches the given key");
+            throw new DictionaryException("There is no records to delete");
         }
 
         while (true) {
@@ -129,21 +129,21 @@ public class OrderedDictionary implements OrderedDictionaryADT {
 
         // Case 1: Node is leaf and is just removed
        if(current.isLeaf() == true) {
-           current = null;
+           current.setData(null);
        }
        // Case 2: Copy child node to current node and delete the node
-        if ( current.hasLeftChild() == true && current.hasRightChild() == false) {
+        else if ( current.hasLeftChild() == true && current.hasRightChild() == false) {
             Node leftChild = current.getLeftChild(); // Create child
             current.setLeftChild(null); // Remove child node
             current = leftChild; // Copy Child to current
         }
-        if ( current.hasLeftChild() == false && current.hasRightChild() == true) {
+        else if ( current.hasLeftChild() == false && current.hasRightChild() == true) {
             Node rightChild = current.getRightChild(); // Create child
             current.setRightChild(null); // Remove child node
             current = rightChild; // Copy Child to current
         }
-        // Case 3:
-        else {
+        // Case 3: It has two child nodes
+        else if (current.hasLeftChild() == true && current.hasLeftChild()  == true) {
             // find successor of k
             Node successor;
             if(current.hasRightChild()) {
@@ -165,14 +165,11 @@ public class OrderedDictionary implements OrderedDictionaryADT {
                     temp = successor;
                     successor = successor.getParent();
                 }
-                if(successor == null ) {
-                    throw new DictionaryException("No successor for record");
-                }
             }
             //set current to successor
             current = successor;
             //delete inorder successor
-            successor = null;
+            successor.setData(null);
         }
     }
 
