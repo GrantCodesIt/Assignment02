@@ -138,7 +138,9 @@ public class OrderedDictionary implements OrderedDictionaryADT {
             current = leftChild; // Copy Child to current
         }
         if ( current.hasLeftChild() == false && current.hasRightChild() == true) {
-
+            Node rightChild = current.getRightChild(); // Create child
+            current.setRightChild(null); // Remove child node
+            current = rightChild; // Copy Child to current
         }
         // Case 3:
         else {
