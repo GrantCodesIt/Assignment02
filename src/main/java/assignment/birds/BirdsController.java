@@ -182,7 +182,6 @@ public class BirdsController implements Initializable {
         // Write this method;
         // uses successor() method
         try {
-            bird = this.bird;
             bird = database.successor(bird.getDataKey());
             showBird();
         } catch ( DictionaryException abc) {

@@ -101,17 +101,77 @@ public class OrderedDictionary implements OrderedDictionaryADT {
      */
     @Override
     public void remove(DataKey k) throws DictionaryException {
-        // set predecssor.next == null
-        // Grab predecessor to k
-        // If has one, check if it has a left child, which it removes. And if not we remove right child
-        Node node = root;
-        node.equals(predecessor(k));
-        if (node.hasLeftChild() == true) {
-            node.setLeftChild(null);
-        } else if (node.hasRightChild() == true) {
-            node.setRightChild(null);
+        Node current = root;
+        int comparison;
+        if (root.isEmpty()) {
+            throw new DictionaryException("There is no record matches the given key");
         }
 
+        while (true) {
+            comparison = current.getData().getDataKey().compareTo(k);
+            if (comparison == 0) { // key found
+                break;
+            }
+            if (comparison == 1) {
+                if (current.getLeftChild() == null) {
+                    // Key not found
+                    throw new DictionaryException("There is no record matches the given key");
+                }
+                current = current.getLeftChild();
+            } else if (comparison == -1) {
+                if (current.getRightChild() == null) {
+                    // Key not found
+                    throw new DictionaryException("There is no record matches the given key");
+                }
+                current = current.getRightChild();
+            }
+        }
+
+        // Case 1: Node is leaf and is just removed
+       if(current.isLeaf() == true) {
+           current = null;
+       }
+       // Case 2: Copy child node to current node and delete the node
+        if ( current.hasLeftChild() == true && current.hasRightChild() == false) {
+            Node leftChild = current.getLeftChild(); // Create child
+            current.setLeftChild(null); // Remove child node
+            current = leftChild; // Copy Child to current
+        }
+        if ( current.hasLeftChild() == false && current.hasRightChild() == true) {
+
+        }
+        // Case 3:
+        else {
+            // find successor of k
+            Node successor;
+            if(current.hasRightChild()) {
+                successor = current.getRightChild();
+                while (true) {
+                    if (successor.isLeaf() == true) {
+                        break;
+                    } else if (successor.hasLeftChild()) {
+                        successor = successor.getLeftChild();
+                    } else {
+                        break;
+                    }
+                }
+            }
+            else {
+                Node temp = current;
+                 successor = current.getParent();
+                while(successor != null && temp == successor.getRightChild()) {
+                    temp = successor;
+                    successor = successor.getParent();
+                }
+                if(successor == null ) {
+                    throw new DictionaryException("No successor for record");
+                }
+            }
+            //set current to successor
+            current = successor;
+            //delete inorder successor
+            successor = null;
+        }
     }
 
     /**
@@ -129,6 +189,7 @@ public class OrderedDictionary implements OrderedDictionaryADT {
         // find(key).next and return it
         // iterate through previous and find key
         // check next if has left or right child and return it
+
         Node current = root;
         int comparison;
         if (root.isEmpty()) {
@@ -138,18 +199,7 @@ public class OrderedDictionary implements OrderedDictionaryADT {
         while (true) {
             comparison = current.getData().getDataKey().compareTo(k);
             if (comparison == 0) { // key found
-                // Check if has left sucessor
-                if (current.hasLeftChild() == true) {
-                    current = current.getLeftChild();
-                    return current.getData();
-                }
-                // If not check if has right sucessor
-                else if (current.hasRightChild() == true) {
-                    return current.getData();
-                }
-                // If no sucessor throw error
-                else
-                    throw new DictionaryException("There is no sucessor to this key");
+               break;
             }
             if (comparison == 1) {
                 if (current.getLeftChild() == null) {
@@ -165,8 +215,35 @@ public class OrderedDictionary implements OrderedDictionaryADT {
                 current = current.getRightChild();
             }
         }
-    }
 
+        if(current.hasRightChild()) {
+            Node successor = current.getRightChild();
+            while (true) {
+                if (successor.isLeaf() == true) {
+                    break;
+                } else if (successor.hasLeftChild()) {
+                    successor = successor.getLeftChild();
+                } else {
+                    break;
+                }
+            }
+            return successor.getData();
+        }
+        else {
+            Node temp = current;
+            Node successor = current.getParent();
+            while(successor != null && temp == successor.getRightChild()) {
+                temp = successor;
+                successor = successor.getParent();
+            }
+            if(successor == null ) {
+                throw new DictionaryException("No successor for record");
+            }
+            else
+                return successor.getData();
+        }
+
+    }
 
     /**
      * Returns the predecessor of k (the record from the ordered dictionary with
@@ -183,39 +260,60 @@ public class OrderedDictionary implements OrderedDictionaryADT {
         // use iterator to find key location data, and use the next iterator to stop one short and return that
         //
         Node current = root;
-        Node previous = current;
-        int comparison = current.getData().getDataKey().compareTo(k);
-        //Case 1: If empty
+        int comparison;
         if (root.isEmpty()) {
-            throw new DictionaryException("There is no previous record matches the given key");
+            throw new DictionaryException("There is no record matches the given key");
         }
-        //Case 2: Only one node
-        if (comparison == 0) {
-            throw new DictionaryException("There is no previous record matches the given key");
-        }
-        //Case 3: Search Tree for key and return previous
+        //Makes current equal to datakey k
         while (true) {
-
             comparison = current.getData().getDataKey().compareTo(k);
             if (comparison == 0) { // key found
-                return previous.getData();
+                break;
             }
             if (comparison == 1) {
                 if (current.getLeftChild() == null) {
                     // Key not found
-                    throw new DictionaryException("There is no previous record matches the given key");
+                    throw new DictionaryException("There is no record matches the given key");
                 }
-                previous = current;
                 current = current.getLeftChild();
             } else if (comparison == -1) {
                 if (current.getRightChild() == null) {
                     // Key not found
-                    throw new DictionaryException("There is no previous record matches the given key");
+                    throw new DictionaryException("There is no record matches the given key");
                 }
-                previous = current;
                 current = current.getRightChild();
             }
         }
+
+        //
+        if(current.hasLeftChild()) {
+            Node successor = current.getLeftChild();
+            while (true) {
+                if (successor.isLeaf() == true) {
+                    break;
+                } else if (successor.hasRightChild()) {
+                    successor = successor.getRightChild();
+                } else {
+                    break;
+                }
+            }
+            return successor.getData();
+        }
+        else {
+            Node temp = current;
+            Node successor = current.getParent();
+            while(successor != null && temp == successor.getLeftChild()) {
+                temp = successor;
+                successor = successor.getParent();
+            }
+            if(successor == null ) {
+                throw new DictionaryException("No previous for record");
+            }
+            else
+                return successor.getData();
+        }
+
+        // Replace successor lefts and rights
 
     }
 
@@ -239,12 +337,9 @@ public class OrderedDictionary implements OrderedDictionaryADT {
                 current = current.getLeftChild();
             }
             else
-                break;
+               break;
         }
         return current.getData();
-        // Need to REWRITE and iterate through the left most of the tree
-
-        // change this statement
     }
 
     /*
